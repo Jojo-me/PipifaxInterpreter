@@ -1,9 +1,10 @@
 grammar Expr;
 
-prog: (line NEWLINE)*;
+prog: NEWLINE? (line NEWLINE)* line?;
 
-line: declaration
-    | assignment
+line: declaration COMMENT?
+    | assignment COMMENT?
+    | COMMENT
     ;
 
 declaration: 'var' ID 'int';
@@ -14,3 +15,5 @@ ID: [A-Za-z_][A-Za-z_0-9]*;
 NEWLINE: [\n\r]+;
 INT: [0-9]+;
 SPACE: [ \t]+ -> skip;
+
+COMMENT: '#'~[\n\r]+;
