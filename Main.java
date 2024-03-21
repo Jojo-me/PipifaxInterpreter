@@ -17,7 +17,8 @@ public class Main {
             ExprParser exprParser = new ExprParser(tokenStream);
 
             ParserRuleContext progContext = exprParser.prog();
-            progContext.accept(new ExprVisitorPrint());
+
+            progContext.accept(new ExprVisitorDeclaration());
             // ParseTreeWalker.DEFAULT.walk(null, progContext);
         } catch (IOException e) {
             e.printStackTrace();
