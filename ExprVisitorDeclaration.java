@@ -4,12 +4,6 @@ import org.antlr.v4.runtime.tree.RuleNode;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
 public class ExprVisitorDeclaration implements ExprVisitor<String> {
-
-    @Override
-    public String visit(ParseTree arg0) {
-        return null;
-    }
-
     @Override
     public String visitChildren(RuleNode arg0) {
         String result = "";
@@ -18,11 +12,6 @@ public class ExprVisitorDeclaration implements ExprVisitor<String> {
             result += child.accept(this) + "child\n";
         }
         return result;
-    }
-
-    @Override
-    public String visitErrorNode(ErrorNode arg0) {
-        return null;
     }
 
     @Override
@@ -67,23 +56,8 @@ public class ExprVisitorDeclaration implements ExprVisitor<String> {
     }
 
     @Override
-    public String visitAssignment(ExprParser.AssignmentContext ctx) {
-        return null;
-    }
-
-    @Override
-    public String visitExpression(ExprParser.ExpressionContext ctx) {
-        return null;
-    }
-
-    @Override
     public String visitTerm(ExprParser.TermContext ctx) {
         return visitChildren(ctx);
-    }
-
-    @Override
-    public String visitFactor(ExprParser.FactorContext ctx) {
-        return null;
     }
 
     @Override
@@ -97,6 +71,36 @@ public class ExprVisitorDeclaration implements ExprVisitor<String> {
             default:
                 return null;
         }
+    }
+
+    @Override
+    public String visit(ParseTree arg0) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'visit'");
+    }
+
+    @Override
+    public String visitErrorNode(ErrorNode arg0) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'visitErrorNode'");
+    }
+
+    @Override
+    public String visitAssignment(ExprParser.AssignmentContext ctx) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'visitAssignment'");
+    }
+
+    @Override
+    public String visitExpression(ExprParser.ExpressionContext ctx) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'visitExpression'");
+    }
+
+    @Override
+    public String visitFactor(ExprParser.FactorContext ctx) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'visitFactor'");
     }
 
 }
