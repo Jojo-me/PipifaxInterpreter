@@ -1,6 +1,5 @@
 import java.io.IOException;
 
-import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -18,8 +17,9 @@ public class Main {
 
             ParserRuleContext progContext = exprParser.prog();
 
-            progContext.accept(new ExprVisitorDeclaration());
-            // ParseTreeWalker.DEFAULT.walk(null, progContext);
+            String declarations = progContext.accept(new ExprVisitorDeclaration());
+
+            System.out.println(declarations);
         } catch (IOException e) {
             e.printStackTrace();
         }
