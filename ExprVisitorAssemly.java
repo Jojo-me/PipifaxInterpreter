@@ -3,13 +3,13 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.RuleNode;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
-public class ExprVisitorDeclaration implements ExprVisitor<String> {
+public class ExprVisitorAssemly implements ExprVisitor<String> {
     @Override
     public String visitChildren(RuleNode arg0) {
         String result = "";
         for (int i = 0; i < arg0.getChildCount(); i++) {
             var child = arg0.getChild(i);
-            result += child.accept(this) + "child\n";
+            result += child.accept(this) + "\n";
         }
         return result;
     }
@@ -23,22 +23,30 @@ public class ExprVisitorDeclaration implements ExprVisitor<String> {
 
     @Override
     public String visitProg(ExprParser.ProgContext ctx) {
-        String result = "";
+        String result = ".data\n";
+
         for (var singleLine : ctx.line()) {
+            if (singleLine.declaration() == null)
+                continue;
             String fromLine = singleLine.accept(this);
-            if (fromLine != null)
-                result += fromLine + "\n";
+            result += fromLine;
         }
+
+        result += "\n.text\n.globl main\nmain:\n";
+
+        for (var singleLine : ctx.line()) {
+            if (singleLine.assignment() == null)
+                continue;
+            String fromLine = singleLine.accept(this);
+            result += fromLine;
+        }
+
         return result;
     }
 
     @Override
     public String visitLine(ExprParser.LineContext ctx) {
-        var declarationContext = ctx.declaration();
-        if (declarationContext != null) {
-            return declarationContext.accept(this);
-        }
-        return null;
+        return visitChildren(ctx);
     }
 
     @Override
@@ -89,8 +97,11 @@ public class ExprVisitorDeclaration implements ExprVisitor<String> {
 
     @Override
     public String visitAssignment(ExprParser.AssignmentContext ctx) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'visitAssignment'");
+        String result = "";
+
+        result += ctx.ID();
+
+        return result;
     }
 
     @Override
