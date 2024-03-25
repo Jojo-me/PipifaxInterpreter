@@ -68,6 +68,8 @@ public class ExprVisitorDeclaration implements ExprVisitor<String> {
         switch (type) {
             case "int":
                 return ".word";
+            case "double":
+                return ".word";
             default:
                 return null;
         }
@@ -101,6 +103,12 @@ public class ExprVisitorDeclaration implements ExprVisitor<String> {
     public String visitFactor(ExprParser.FactorContext ctx) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'visitFactor'");
+    }
+
+    @Override
+    public String visitRvalue(ExprParser.RvalueContext ctx) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'visitRvalue'");
     }
 
 }
