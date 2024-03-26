@@ -6,12 +6,13 @@ import org.antlr.v4.runtime.tree.TerminalNode;
 public class ExprVisitorAssembly implements ExprVisitor<String> {
     @Override
     public String visitChildren(RuleNode arg0) {
-        String result = "";
+        StringBuffer result = new StringBuffer();
         for (int i = 0; i < arg0.getChildCount(); i++) {
             var child = arg0.getChild(i);
-            result += child.accept(this) + "\n";
+            result.append(child.accept(this));
+            result.append("\n");
         }
-        return result;
+        return result.toString();
     }
 
     @Override
@@ -22,27 +23,26 @@ public class ExprVisitorAssembly implements ExprVisitor<String> {
 
     @Override
     public String visitProg(ExprParser.ProgContext ctx) {
-        String result = "\t.data\n";
+        StringBuffer result = new StringBuffer();
+        result.append("\t.data\n");
 
         // only declarations
         for (var singleLine : ctx.line()) {
             if (singleLine.declaration() == null)
                 continue;
-            String fromLine = singleLine.accept(this);
-            result += fromLine;
+            result.append(singleLine.accept(this));
         }
 
-        result += "\n\t.text\n\t.globl main\nmain:\n";
+        result.append("\n\t.text\n\t.globl main\nmain:\n");
 
         // only assignments
         for (var singleLine : ctx.line()) {
             if (singleLine.assignment() == null)
                 continue;
-            String fromLine = singleLine.accept(this);
-            result += fromLine;
+                result.append(singleLine.accept(this));
         }
 
-        return result;
+        return result.toString();
     }
 
     @Override
