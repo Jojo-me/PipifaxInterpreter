@@ -102,8 +102,7 @@ public class ExprVisitorAssembly implements ExprVisitor<String> {
 
         result.append("\tli t0, ");
         result.append(ctx.rint().accept(this));
-        result.append("\n");
-        result.append("\tsw t0, ");
+        result.append("\n\tsw t0, ");
         result.append(ctx.ID().accept(this));
         result.append(", t1");
 
