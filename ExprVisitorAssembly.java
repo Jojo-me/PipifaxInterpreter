@@ -2,8 +2,15 @@ import org.antlr.v4.runtime.tree.ErrorNode;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.RuleNode;
 import org.antlr.v4.runtime.tree.TerminalNode;
+import java.util.logging.ConsoleHandler;
+import java.util.logging.Handler;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class ExprVisitorAssembly implements ExprVisitor<String> {
+    Logger logger = Logger.getAnonymousLogger();
+    
+    
     @Override
     public String visitChildren(RuleNode arg0) {
         StringBuffer result = new StringBuffer();
@@ -17,7 +24,8 @@ public class ExprVisitorAssembly implements ExprVisitor<String> {
 
     @Override
     public String visitTerminal(TerminalNode arg0) {
-        System.out.println("Visit Terminal");
+        logger.setLevel(Level.ALL);
+        logger.info("Visit Terminal");
         return arg0.getText();
     }
 
@@ -52,7 +60,7 @@ public class ExprVisitorAssembly implements ExprVisitor<String> {
 
     @Override
     public String visitDeclaration(ExprParser.DeclarationContext ctx) {
-        System.out.println("Visit Declaration");
+        logger.info("Visit Declaration");
 
         StringBuffer result = new StringBuffer();
 
@@ -71,7 +79,7 @@ public class ExprVisitorAssembly implements ExprVisitor<String> {
 
     @Override
     public String visitType(ExprParser.TypeContext ctx) {
-        System.out.println("Visit Type");
+        logger.info("Visit Type");
 
         String type = ctx.children.get(0).getText();
         switch (type) {
