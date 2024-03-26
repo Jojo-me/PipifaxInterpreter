@@ -17,7 +17,7 @@ public class Main {
 
             ParserRuleContext progContext = exprParser.prog();
 
-            String declarations = progContext.accept(new ExprVisitorAssemly());
+            String declarations = progContext.accept(new ExprVisitorAssembly());
 
             System.out.println("\nOutput Assembler Code:");
             System.out.println(declarations);

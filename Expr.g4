@@ -10,7 +10,9 @@ line: declaration
 
 declaration: 'var' ID type;
 
-assignment: ID '=' expression;
+assignment: ID '=' rint;
+
+rint: INT;
 
 expression: term 
             ( ('+' term)
@@ -25,7 +27,7 @@ term: factor
       ;
       
 factor: rvalue
-      | ID
+//      | ID
       | '(' expression ')'
       | ('-' factor)
       ;

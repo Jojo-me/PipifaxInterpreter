@@ -17,14 +17,14 @@ public class ExprVisitorAssembly implements ExprVisitor<String> {
     @Override
     public String visitTerminal(TerminalNode arg0) {
         System.out.println("Visit Terminal");
-        String result = "." + arg0.getText();
-        return result;
+        return arg0.getText();
     }
 
     @Override
     public String visitProg(ExprParser.ProgContext ctx) {
-        String result = ".data\n";
+        String result = "\t.data\n";
 
+        // only declarations
         for (var singleLine : ctx.line()) {
             if (singleLine.declaration() == null)
                 continue;
@@ -32,8 +32,9 @@ public class ExprVisitorAssembly implements ExprVisitor<String> {
             result += fromLine;
         }
 
-        result += "\n.text\n.globl main\nmain:\n";
+        result += "\n\t.text\n\t.globl main\nmain:\n";
 
+        // only assignments
         for (var singleLine : ctx.line()) {
             if (singleLine.assignment() == null)
                 continue;
@@ -53,14 +54,14 @@ public class ExprVisitorAssembly implements ExprVisitor<String> {
     public String visitDeclaration(ExprParser.DeclarationContext ctx) {
         System.out.println("Visit Declaration");
 
-        String result = "";
+        StringBuffer result = new StringBuffer();
 
-        result += ctx.ID().accept(this);
-        result += ": ";
-        result += ctx.type().accept(this);
-        result += " 0";
+        result.append(ctx.ID().accept(this));
+        result.append(":\t");
+        result.append(ctx.type().accept(this));
+        result.append(" 0");
 
-        return result;
+        return result.toString();
     }
 
     @Override
@@ -97,11 +98,16 @@ public class ExprVisitorAssembly implements ExprVisitor<String> {
 
     @Override
     public String visitAssignment(ExprParser.AssignmentContext ctx) {
-        String result = "";
+        StringBuffer result = new StringBuffer();
 
-        result += ctx.ID();
+        result.append("\tli t0, ");
+        result.append(ctx.rint().accept(this));
+        result.append("\n");
+        result.append("\tsw t0, ");
+        result.append(ctx.ID().accept(this));
+        result.append(", t1");
 
-        return result;
+        return result.toString();
     }
 
     @Override
@@ -120,6 +126,11 @@ public class ExprVisitorAssembly implements ExprVisitor<String> {
     public String visitRvalue(ExprParser.RvalueContext ctx) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'visitRvalue'");
+    }
+
+    @Override
+    public String visitRint(ExprParser.RintContext ctx) {
+        return ctx.getText();
     }
 
 }
