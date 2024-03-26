@@ -104,6 +104,12 @@ public class ExprVisitorNameChecker implements ExprVisitor<Void> {
         }
         return existing;
     }
+
+    @Override
+    public Void visitRint(ExprParser.RintContext ctx) {
+        visitChildren(ctx);
+        return null;
+    }
     
 }
 

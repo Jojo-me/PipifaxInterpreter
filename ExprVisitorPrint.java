@@ -96,5 +96,11 @@ public class ExprVisitorPrint implements ExprVisitor<Void> {
         visitChildren(ctx);
         return null;
     }
-    
+
+    @Override
+    public Void visitRint(ExprParser.RintContext ctx) {
+        System.out.println("Visit Rint");
+        visitChildren(ctx);
+        return null;
+    }    
 }
