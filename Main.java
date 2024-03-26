@@ -17,10 +17,8 @@ public class Main {
 
             ParserRuleContext progContext = exprParser.prog();
 
-            String declarations = progContext.accept(new ExprVisitorAssemly());
+            progContext.accept(new ExprVisitorNameChecker());
 
-            System.out.println("\nOutput Assembler Code:");
-            System.out.println(declarations);
         } catch (IOException e) {
             e.printStackTrace();
         }
