@@ -3,7 +3,7 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.RuleNode;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
-public class ExprVisitorAssemly implements ExprVisitor<String> {
+public class ExprVisitorAssembly implements ExprVisitor<String> {
     @Override
     public String visitChildren(RuleNode arg0) {
         String result = "";
