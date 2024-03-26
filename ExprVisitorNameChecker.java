@@ -7,7 +7,7 @@ import java.util.*;
 
 public class ExprVisitorNameChecker implements ExprVisitor<Void> {
 
-    ArrayList varList  = new ArrayList<String>();
+    ArrayList<String> varList  = new ArrayList<String>();
 
     @Override
     public Void visit(ParseTree arg0) {
