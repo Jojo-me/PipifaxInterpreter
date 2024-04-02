@@ -1,13 +1,11 @@
-import org.antlr.v4.runtime.tree.ErrorNode;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.RuleNode;
-import org.antlr.v4.runtime.tree.TerminalNode;
-
 import java.util.*;
 
-public class ExprVisitorNameChecker implements ExprVisitor<Void> {
+public class ExprVisitorNameChecker extends ExprBaseVisitor<Void> {
 
-    ArrayList<String> varList  = new ArrayList<String>();
+    List<String> intLiterals = new ArrayList<String>();
+    List<String> doubleLiterals = new ArrayList<String>();
 
     @Override
     public Void visit(ParseTree arg0) {
@@ -17,42 +15,29 @@ public class ExprVisitorNameChecker implements ExprVisitor<Void> {
     @Override
     public Void visitChildren(RuleNode arg0) {
 
-        for (int i = 0; i < arg0.getChildCount(); i++){
+        for (int i = 0; i < arg0.getChildCount(); i++) {
             var child = arg0.getChild(i);
             child.accept(this);
         }
         return null;
     }
-
-    @Override
-    public Void visitErrorNode(ErrorNode arg0) {
-        return null;
-    }
-
-    @Override
-    public Void visitTerminal(TerminalNode arg0) {
-        return null;
-    }
-
-    @Override
-    public Void visitProg(ExprParser.ProgContext ctx) {
-        //System.out.println("visitProg");
-        visitChildren(ctx);
-        return null;
-    }
-
-    @Override
-    public Void visitLine(ExprParser.LineContext ctx) {
-        visitChildren(ctx);
-        return null;
-    }
-
+    
     @Override
     public Void visitDeclaration(ExprParser.DeclarationContext ctx) {
-        if (isExisting(ctx.ID().getText())) {
-            System.out.println("variable " + ctx.ID().getText() + " already exist");
-        } else {
-            varList.add(ctx.ID().getText());
+        String literalID = ctx.ID().getText();
+        String type = ctx.type().getText();
+
+        switch (type) {
+            case "int":
+                defineInt(literalID);
+                break;
+            case "double":
+                defineDouble(literalID);
+                break;
+
+            default:
+                System.out.printf("Type not defined: %s\n", type);
+                break;
         }
         visitChildren(ctx);
         return null;
@@ -60,56 +45,40 @@ public class ExprVisitorNameChecker implements ExprVisitor<Void> {
 
     @Override
     public Void visitAssignment(ExprParser.AssignmentContext ctx) {
-        if (!isExisting(ctx.ID().getText())) {
-            System.out.println("variable " + ctx.ID().getText() + " doesn't exist");
+        String literalID = ctx.ID().getText();
+        // TODO: is it int or double?
+        findInt(literalID);
+
+        visitChildren(ctx);
+        return null;
+    }
+
+    private void defineInt(String literal) {
+        if (intLiterals.contains(literal)) {
+            System.out.printf("Variable %s already exists\n", literal);
+        } else {
+            intLiterals.add(literal);
         }
-        visitChildren(ctx);
-        return null;
     }
 
-    @Override
-    public Void visitExpression(ExprParser.ExpressionContext ctx) {
-        visitChildren(ctx);
-        return null;
-    }
-
-    @Override
-    public Void visitTerm(ExprParser.TermContext ctx) {
-        visitChildren(ctx);
-        return null;
-    }
-
-    @Override
-    public Void visitFactor(ExprParser.FactorContext ctx) {
-        visitChildren(ctx);
-        return null;
-    }
-
-    @Override
-    public Void visitType(ExprParser.TypeContext ctx) {
-        visitChildren(ctx);
-        return null;
-    }
-
-    public boolean isExisting(String testingVar){
-        boolean existing = false;
-        if (varList.contains(testingVar)) {
-            existing = true;
+    private void defineDouble(String literal) {
+        if (doubleLiterals.contains(literal)) {
+            System.out.printf("Variable %s already exists\n", literal);
+        } else {
+            doubleLiterals.add(literal);
+            System.out.printf("Define %s\n", literal);
         }
-        return existing;
     }
 
-    @Override
-    public Void visitRValueDouble(ExprParser.RValueDoubleContext ctx) {
-        visitChildren(ctx);
-        return null;
+    private void findInt(String intLiteral) {
+        if (!intLiterals.contains(intLiteral)) {
+            System.out.printf("Variable %s is not defined\n", intLiteral);
+        }
     }
 
-    @Override
-    public Void visitRValueInt(ExprParser.RValueIntContext ctx) {
-        visitChildren(ctx);
-        return null;
+    private void findDouble(String doubleLiteral) {
+        if (!doubleLiterals.contains(doubleLiteral)) {
+            System.out.printf("Variable %s is not defined\n", doubleLiteral);
+        }
     }
-    
 }
-
