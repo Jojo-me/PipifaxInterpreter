@@ -1,14 +1,8 @@
-public class PfxType {
+public interface PfxType {
 
-    public static void assignable(PfxType pfxtype) {
-        
-    }
+    public void assignable(PfxType pfxtype);
 
-    public static void isDoubleType() {
-        
-    }
+    public void isDoubleType();
 
-    public static void isIntType() {
-        
-    }
+    public void isIntType();
 }
