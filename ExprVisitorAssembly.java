@@ -84,7 +84,7 @@ public class ExprVisitorAssembly implements ExprVisitor<String> {
             case "int":
                 return ".word";
             case "double":
-                return ".word";
+                return ".double";
             default:
                 return null;
         }
@@ -106,11 +106,21 @@ public class ExprVisitorAssembly implements ExprVisitor<String> {
     public String visitAssignment(ExprParser.AssignmentContext ctx) {
         StringBuffer result = new StringBuffer();
 
-        result.append("\tli t0, ");
-        result.append(ctx.rvalue().accept(this));
-        result.append("\n\tsw t0, ");
-        result.append(ctx.ID().accept(this));
-        result.append(", t1");
+        if (variables.isDoubleType){
+            //load muss noch richtig umgesetzt werden da es kein load immediate gibt
+            result.append("\tfld f1, ");
+            result.append(ctx.rvalue().accept(this));
+            result.append(", t1\n\tfsd f1, ");
+            result.append(ctx.ID().accept(this));
+            result.append(", t1");
+        } else if (variables.isIntType) {
+            result.append("\tli t0, ");
+            result.append(ctx.rvalue().accept(this));
+            result.append("\n\tsw t0, ");
+            result.append(ctx.ID().accept(this));
+            result.append(", t1");
+        }
+
 
         return result.toString();
     }
