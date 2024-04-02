@@ -2,15 +2,12 @@ import org.antlr.v4.runtime.tree.ErrorNode;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.RuleNode;
 import org.antlr.v4.runtime.tree.TerminalNode;
-import java.util.logging.ConsoleHandler;
-import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class ExprVisitorAssembly implements ExprVisitor<String> {
     Logger logger = Logger.getAnonymousLogger();
-    
-    
+
     @Override
     public String visitChildren(RuleNode arg0) {
         StringBuffer result = new StringBuffer();
@@ -31,6 +28,7 @@ public class ExprVisitorAssembly implements ExprVisitor<String> {
 
     @Override
     public String visitProg(ExprParser.ProgContext ctx) {
+        System.out.println("PROG");
         StringBuffer result = new StringBuffer();
         result.append("\t.data\n");
 
@@ -47,7 +45,7 @@ public class ExprVisitorAssembly implements ExprVisitor<String> {
         for (var singleLine : ctx.line()) {
             if (singleLine.assignment() == null)
                 continue;
-                result.append(singleLine.accept(this));
+            result.append(singleLine.accept(this));
         }
 
         return result.toString();
@@ -109,7 +107,7 @@ public class ExprVisitorAssembly implements ExprVisitor<String> {
         StringBuffer result = new StringBuffer();
 
         result.append("\tli t0, ");
-        result.append(ctx.rint().accept(this));
+        result.append(ctx.rvalue().accept(this));
         result.append("\n\tsw t0, ");
         result.append(ctx.ID().accept(this));
         result.append(", t1");
@@ -130,13 +128,12 @@ public class ExprVisitorAssembly implements ExprVisitor<String> {
     }
 
     @Override
-    public String visitRvalue(ExprParser.RvalueContext ctx) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'visitRvalue'");
+    public String visitRValueDouble(ExprParser.RValueDoubleContext ctx) {
+        return ctx.getText();
     }
 
     @Override
-    public String visitRint(ExprParser.RintContext ctx) {
+    public String visitRValueInt(ExprParser.RValueIntContext ctx) {
         return ctx.getText();
     }
 

@@ -91,12 +91,6 @@ public class ExprVisitorNameChecker implements ExprVisitor<Void> {
         return null;
     }
 
-    @Override
-    public Void visitRvalue(ExprParser.RvalueContext ctx) {
-        visitChildren(ctx);
-        return null;
-    }
-
     public boolean isExisting(String testingVar){
         boolean existing = false;
         if (varList.contains(testingVar)) {
@@ -106,7 +100,13 @@ public class ExprVisitorNameChecker implements ExprVisitor<Void> {
     }
 
     @Override
-    public Void visitRint(ExprParser.RintContext ctx) {
+    public Void visitRValueDouble(ExprParser.RValueDoubleContext ctx) {
+        visitChildren(ctx);
+        return null;
+    }
+
+    @Override
+    public Void visitRValueInt(ExprParser.RValueIntContext ctx) {
         visitChildren(ctx);
         return null;
     }

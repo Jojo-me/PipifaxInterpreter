@@ -91,16 +91,16 @@ public class ExprVisitorPrint implements ExprVisitor<Void> {
     }
 
     @Override
-    public Void visitRvalue(ExprParser.RvalueContext ctx) {
-        System.out.println("Visit Rvalue");
+    public Void visitRValueDouble(ExprParser.RValueDoubleContext ctx) {
+        System.out.println("Visit RValueDouble");
         visitChildren(ctx);
         return null;
     }
 
     @Override
-    public Void visitRint(ExprParser.RintContext ctx) {
-        System.out.println("Visit Rint");
+    public Void visitRValueInt(ExprParser.RValueIntContext ctx) {
+        System.out.println("Visit RValueInt");
         visitChildren(ctx);
         return null;
-    }    
+    }
 }
