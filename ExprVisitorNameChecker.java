@@ -4,8 +4,7 @@ import java.util.*;
 
 public class ExprVisitorNameChecker extends ExprBaseVisitor<Void> {
 
-    List<String> intLiterals = new ArrayList<String>();
-    List<String> doubleLiterals = new ArrayList<String>();
+    List<PfxVariable> variables = new ArrayList<PfxVariable>();
 
     @Override
     public Void visit(ParseTree arg0) {
@@ -21,7 +20,7 @@ public class ExprVisitorNameChecker extends ExprBaseVisitor<Void> {
         }
         return null;
     }
-    
+
     @Override
     public Void visitDeclaration(ExprParser.DeclarationContext ctx) {
         String literalID = ctx.ID().getText();
@@ -29,10 +28,10 @@ public class ExprVisitorNameChecker extends ExprBaseVisitor<Void> {
 
         switch (type) {
             case "int":
-                defineInt(literalID);
+                defineVariable(literalID, new PfxInt());
                 break;
             case "double":
-                defineDouble(literalID);
+                defineVariable(literalID, new PfxDouble());
                 break;
 
             default:
@@ -46,39 +45,49 @@ public class ExprVisitorNameChecker extends ExprBaseVisitor<Void> {
     @Override
     public Void visitAssignment(ExprParser.AssignmentContext ctx) {
         String literalID = ctx.ID().getText();
-        // TODO: is it int or double?
-        findInt(literalID);
+        PfxType rType = ctx.rvalue().accept(new ExprVisitorTypeCommulator());
 
-        visitChildren(ctx);
+        foundVariable(literalID, rType);
+
         return null;
     }
 
-    private void defineInt(String literal) {
-        if (intLiterals.contains(literal)) {
-            System.out.printf("Variable %s already exists\n", literal);
+    /*
+     * Returns index in `variables`. If not exists returns -1
+     */
+    private int getIndexOfVariable(String name) {
+        for (int i = 0; i < variables.size(); i++) {
+            if (variables.get(i).getName().equals(name)) {
+                return i;
+            }
+        }
+
+        return -1;
+    }
+
+    private void defineVariable(String name, PfxType type) {
+        PfxVariable variable = new PfxVariable(name, type);
+
+        if (getIndexOfVariable(name) >= 0) {
+            System.out.printf("Variable %s already exists\n", name);
         } else {
-            intLiterals.add(literal);
+            variables.add(variable);
         }
     }
 
-    private void defineDouble(String literal) {
-        if (doubleLiterals.contains(literal)) {
-            System.out.printf("Variable %s already exists\n", literal);
+    private void foundVariable(String varName, PfxType typeToAssign) {
+        int index = getIndexOfVariable(varName);
+
+        if (index < 0) {
+            System.out.printf("Variable %s is not defined\n", varName);
+            return;
+        }
+
+        PfxVariable pfxVariable = variables.get(index);
+        if (pfxVariable.getType().assignable(typeToAssign)) {
+            System.out.printf("Correct Assignment to %s\n", varName);
         } else {
-            doubleLiterals.add(literal);
-            System.out.printf("Define %s\n", literal);
-        }
-    }
-
-    private void findInt(String intLiteral) {
-        if (!intLiterals.contains(intLiteral)) {
-            System.out.printf("Variable %s is not defined\n", intLiteral);
-        }
-    }
-
-    private void findDouble(String doubleLiteral) {
-        if (!doubleLiterals.contains(doubleLiteral)) {
-            System.out.printf("Variable %s is not defined\n", doubleLiteral);
+            System.out.printf("Cannot assign type to ");
         }
     }
 }
