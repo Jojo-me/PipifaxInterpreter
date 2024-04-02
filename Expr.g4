@@ -10,9 +10,7 @@ line: declaration
 
 declaration: 'var' ID type;
 
-assignment: ID '=' rint;
-
-rint: INT;
+assignment: ID '=' rvalue;
 
 expression: term 
             ( ('+' term)
@@ -35,13 +33,13 @@ factor: rvalue
 type: 'double'
     | 'int';
 
-rvalue: DOUBLE
-      | INT;
+rvalue: DOUBLE # rValueDouble
+      | INT # rValueInt;
 
 ID: [A-Za-z_][A-Za-z_0-9]*;
 NEWLINE: [\n\r]+;
-DOUBLE: [0-9]+'.'[0-9]+;
-INT: [0-9]+;
+DOUBLE: INT'.'[0-9]+;
+INT: ([1-9][0-9]*|[0-9]);
 
 SPACE: [ \t]+ -> skip;
 COMMENT: '#'~[\n\r]* -> skip;
