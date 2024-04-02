@@ -1,8 +1,8 @@
 public interface PfxType {
 
-    public void assignable(PfxType pfxtype);
+    public boolean assignable(PfxType pfxtype);
 
-    public void isDoubleType();
+    public boolean isDoubleType();
 
-    public void isIntType();
+    public boolean isIntType();
 }

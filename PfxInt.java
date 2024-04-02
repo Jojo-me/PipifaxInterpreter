@@ -1,21 +1,22 @@
 public class PfxInt implements PfxType {
 
     @Override
-    public void assignable(PfxType pfxtype) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'assignable'");
+    public boolean assignable(PfxType pfxtype) {
+        if (pfxtype.isIntType()) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @Override
-    public void isDoubleType() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'isDoubleType'");
+    public boolean isDoubleType() {
+        return false;
     }
 
     @Override
-    public void isIntType() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'isIntType'");
+    public boolean isIntType() {
+        return true;
     }
 
 }
