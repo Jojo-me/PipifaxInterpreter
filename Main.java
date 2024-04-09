@@ -1,4 +1,5 @@
 import java.io.IOException;
+import java.util.*;
 
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
@@ -20,10 +21,10 @@ public class Main {
             VariablesList variablesList = new VariablesList();
 
             progContext.accept(new ExprVisitorNameChecker(variablesList));
-
-            //String assemblerCode = progContext.accept(new ExprVisitorAssembly());
-            //System.out.println("Assembler Code:");
-            //System.out.println(assemblerCode);
+            
+            String assemblerCode = progContext.accept(new ExprVisitorAssembly(variablesList));
+            System.out.println("Assembler Code:");
+            System.out.println(assemblerCode);
         } catch (IOException e) {
             e.printStackTrace();
         }

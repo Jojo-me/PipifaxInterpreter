@@ -4,9 +4,16 @@ import org.antlr.v4.runtime.tree.RuleNode;
 import org.antlr.v4.runtime.tree.TerminalNode;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.*;
 
 public class ExprVisitorAssembly implements ExprVisitor<String> {
     Logger logger = Logger.getAnonymousLogger();
+
+    VariablesList variables;
+
+    ExprVisitorAssembly(VariablesList variables){
+        this.variables = variables;
+    }
 
     @Override
     public String visitChildren(RuleNode arg0) {
@@ -106,14 +113,17 @@ public class ExprVisitorAssembly implements ExprVisitor<String> {
     public String visitAssignment(ExprParser.AssignmentContext ctx) {
         StringBuffer result = new StringBuffer();
 
-        if (variables.isDoubleType){
+        String name = ctx.ID().getText();
+        PfxVariable pfxVariable = variables.get(name);
+
+        if (pfxVariable.isDoubleType()){
             //load muss noch richtig umgesetzt werden da es kein load immediate gibt
             result.append("\tfld f1, ");
             result.append(ctx.rvalue().accept(this));
             result.append(", t1\n\tfsd f1, ");
             result.append(ctx.ID().accept(this));
             result.append(", t1");
-        } else if (variables.isIntType) {
+        } else if (pfxVariable.isIntType()) {
             result.append("\tli t0, ");
             result.append(ctx.rvalue().accept(this));
             result.append("\n\tsw t0, ");
