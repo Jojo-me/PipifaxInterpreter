@@ -1,10 +1,13 @@
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.RuleNode;
-import java.util.*;
 
 public class ExprVisitorNameChecker extends ExprBaseVisitor<Void> {
 
-    List<PfxVariable> variables = new ArrayList<PfxVariable>();
+    VariablesList variables;
+
+    ExprVisitorNameChecker(VariablesList variables){
+        this.variables = variables;
+    }
 
     @Override
     public Void visit(ParseTree arg0) {
@@ -52,38 +55,17 @@ public class ExprVisitorNameChecker extends ExprBaseVisitor<Void> {
         return null;
     }
 
-    /*
-     * Returns index in `variables`. If not exists returns -1
-     */
-    private int getIndexOfVariable(String name) {
-        for (int i = 0; i < variables.size(); i++) {
-            if (variables.get(i).getName().equals(name)) {
-                return i;
-            }
-        }
-
-        return -1;
-    }
-
     private void defineVariable(String name, PfxType type) {
-        PfxVariable variable = new PfxVariable(name, type);
-
-        if (getIndexOfVariable(name) >= 0) {
-            System.out.printf("Variable %s already exists\n", name);
-        } else {
-            variables.add(variable);
-        }
+variables.add(new PfxVariable(name, type));
     }
 
     private void foundVariable(String varName, PfxType typeToAssign) {
-        int index = getIndexOfVariable(varName);
+        PfxVariable pfxVariable = variables.get(varName);
 
-        if (index < 0) {
-            System.out.printf("Variable %s is not defined\n", varName);
+        if (pfxVariable == null){
             return;
         }
 
-        PfxVariable pfxVariable = variables.get(index);
         if (pfxVariable.getType().assignable(typeToAssign)) {
             System.out.printf("Correct Assignment to %s\n", varName);
         } else {
