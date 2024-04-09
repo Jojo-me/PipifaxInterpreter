@@ -14,4 +14,12 @@ public class PfxVariable {
     PfxType getType(){
         return type;
     }
+
+    boolean isIntType(){
+        return this.type.isIntType();
+    }
+
+    boolean isDoubleType(){
+        return this.type.isDoubleType();
+    }
 }

@@ -4,7 +4,11 @@ import java.util.*;
 
 public class ExprVisitorNameChecker extends ExprBaseVisitor<Void> {
 
-    List<PfxVariable> variables = new ArrayList<PfxVariable>();
+    List<PfxVariable> variables;
+
+    ExprVisitorNameChecker(List<PfxVariable> var){
+        variables = var;
+    }
 
     @Override
     public Void visit(ParseTree arg0) {
@@ -61,7 +65,6 @@ public class ExprVisitorNameChecker extends ExprBaseVisitor<Void> {
                 return i;
             }
         }
-
         return -1;
     }
 

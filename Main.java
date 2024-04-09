@@ -1,4 +1,5 @@
 import java.io.IOException;
+import java.util.*;
 
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
@@ -6,6 +7,9 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.ParserRuleContext;
 
 public class Main {
+
+    public static List<PfxVariable> variables = new ArrayList<PfxVariable>();
+
     public static void main(String[] args) {
         System.out.println("Programm started");
 
@@ -17,9 +21,9 @@ public class Main {
 
             ParserRuleContext progContext = exprParser.prog();
 
-            progContext.accept(new ExprVisitorNameChecker());
+            progContext.accept(new ExprVisitorNameChecker(variables));
             
-            String assemblerCode = progContext.accept(new ExprVisitorAssembly());
+            String assemblerCode = progContext.accept(new ExprVisitorAssembly(variables));
             System.out.println("Assembler Code:");
             System.out.println(assemblerCode);
         } catch (IOException e) {

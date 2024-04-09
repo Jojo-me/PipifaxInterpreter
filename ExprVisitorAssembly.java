@@ -4,9 +4,16 @@ import org.antlr.v4.runtime.tree.RuleNode;
 import org.antlr.v4.runtime.tree.TerminalNode;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.*;
 
 public class ExprVisitorAssembly implements ExprVisitor<String> {
     Logger logger = Logger.getAnonymousLogger();
+
+    List<PfxVariable> variables;
+
+    ExprVisitorAssembly(List<PfxVariable> var){
+        variables = var;
+    }
 
     @Override
     public String visitChildren(RuleNode arg0) {
