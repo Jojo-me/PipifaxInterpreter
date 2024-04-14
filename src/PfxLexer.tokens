@@ -1,0 +1,15 @@
+T__0=1
+T__1=2
+T__2=3
+T__3=4
+T__4=5
+DoubleLiteral=6
+IntLiteral=7
+ID=8
+WS=9
+COMMENT=10
+'='=1
+'var'=2
+'int'=3
+'double'=4
+'+'=5
