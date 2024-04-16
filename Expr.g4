@@ -13,16 +13,20 @@ declaration: 'var' ID type;
 assignment: ID '=' rvalue;
 
 expression: term 
-            ( ('+' term)
-            | ('-' term)
-            )*
+            (loperation term)*
+            ;
+
+loperation: '+'
+            |'-'
             ;
 
 term: factor
-      ( ('*' factor)
-      | ('/' factor)
-      )*
+      (poperations factor)*
       ;
+
+poperations: '*'
+             |'/'
+             ;
       
 factor: rvalue
 //      | ID
