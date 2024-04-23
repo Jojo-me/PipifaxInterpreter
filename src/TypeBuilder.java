@@ -11,4 +11,11 @@ class TypeBuilder extends PfxBaseVisitor<Type> {
     public Type visitDoubleType(PfxParser.DoubleTypeContext ctx) {
         return Type.doubleType();
     }
+
+    @Override
+    public Type visitArrayType(PfxParser.ArrayTypeContext ctx) {
+        Type t = ctx.type().accept(this);
+        int dim = Integer.parseInt(ctx.IntLiteral().getText());
+        return Type.arrayType(t, dim);
+    }
 }

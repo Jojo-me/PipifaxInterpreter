@@ -14,15 +14,41 @@ class TypeCalculator extends PfxBaseVisitor<Type> {
 
     @Override
     public Type visitAssignmentStmt(PfxParser.AssignmentStmtContext ctx) {
-        Type lhs = variables.get(ctx).type();
+        Type lhs = ctx.lvalue().accept(this);
         Type rhs = ctx.expr().accept(this);
 
         if (!lhs.assignable(rhs)) {
             throw new SemanticError("Incompatible types in assignment");
         }
-        Type t = lhs;
 
         return null;
+    }
+
+    @Override
+    public Type visitIndexedLValue(PfxParser.IndexedLValueContext ctx) {
+        Type indexType = ctx.expr().accept(this);
+        if (!indexType.isInt()) {
+            throw new SemanticError("Index must be an integer value");
+        }
+
+        Type baseType = ctx.lvalue().accept(this);
+        if (!baseType.isArray()) {
+            throw new SemanticError("Indexed access is only possible for arrays.");
+        }
+
+        Type.ArrayType array = (Type.ArrayType) baseType;
+        Type t = array.elementType();
+        types.put(ctx, t);
+        return t;
+    }
+
+    @Override
+    public Type visitNamedLValue(PfxParser.NamedLValueContext ctx) {
+        String name = ctx.ID().getText();
+        Variable v = variables.get(ctx);
+        Type t = v.type();
+        types.put(ctx, t);
+        return t;
     }
 
     @Override
@@ -40,9 +66,8 @@ class TypeCalculator extends PfxBaseVisitor<Type> {
     }
 
     @Override
-    public Type visitNameExpr(PfxParser.NameExprContext ctx) {
-        Variable v = variables.get(ctx);
-        Type t = v.type();
+    public Type visitLValueExpr(PfxParser.LValueExprContext ctx) {
+        Type t = ctx.lvalue().accept(this);
         types.put(ctx, t);
         return t;
     }

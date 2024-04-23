@@ -13,10 +13,6 @@ class NameResolver extends PfxBaseVisitor<Void> {
         this.annotations = annotations;
     }
 
-    private void trace(String msg) {
-        //~ System.out.println("TRACE: " + msg);
-    }
-
     @Override
     public Void visitDeclaration(PfxParser.DeclarationContext ctx) {
         String name = ctx.ID().getText();
@@ -26,32 +22,17 @@ class NameResolver extends PfxBaseVisitor<Void> {
             throw new SemanticError("Global variable " + name + " is declared more than once.");
         }
         annotations.put(ctx, variable);
-        trace("annotating Declaration with " + variable.name());
         return null;
     }
 
     @Override
-    public Void visitAssignmentStmt(PfxParser.AssignmentStmtContext ctx) {
+    public Void visitNamedLValue(PfxParser.NamedLValueContext ctx) {
         String name = ctx.ID().getText();
         Variable variable = globalVariables.get(name);
         if (variable == null) {
             throw new SemanticError("Variable " + name + " is not declared.");
         }
         annotations.put(ctx, variable);
-        trace("annotating AssignmentStmt with " + variable.name());
-        ctx.expr().accept(this);
-        return null;
-    }
-
-    @Override
-    public Void visitNameExpr(PfxParser.NameExprContext ctx) {
-        String name = ctx.ID().getText();
-        Variable variable = globalVariables.get(name);
-        if (variable == null) {
-            throw new SemanticError("Variable " + name + " is not declared.");
-        }
-        annotations.put(ctx, variable);
-        trace("annotating NameExpr with " + variable.name());
         return null;
     }
 }

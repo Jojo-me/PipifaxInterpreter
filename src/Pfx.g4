@@ -5,7 +5,7 @@ program
     ;
 
 statement
-    : ID '=' expr # AssignmentStmt
+    : lvalue '=' expr # AssignmentStmt
     ;
 
 declaration
@@ -13,15 +13,21 @@ declaration
     ;
 
 type
-    : 'int'         # IntType
-    | 'double'      # DoubleType
+    : 'int'                     # IntType
+    | 'double'                  # DoubleType
+    | '[' IntLiteral ']' type   # ArrayType
+    ;
+
+lvalue
+    : ID                    # NamedLValue
+    | lvalue '[' expr ']'   # IndexedLValue
     ;
 
 expr
     : left = expr '+' right = expr     # AddExpr
     | IntLiteral        # IntLiteralExpr
     | DoubleLiteral     # DoubleLiteralExpr
-    | ID                # NameExpr
+    | lvalue            # LValueExpr
     ;
 
 

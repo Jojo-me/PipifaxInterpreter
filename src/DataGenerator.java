@@ -1,17 +1,17 @@
 import ast.Type;
 import ast.Variable;
+import util.Asm;
 import org.antlr.v4.runtime.ParserRuleContext;
 import java.util.Map;
-import java.io.PrintStream;
 
 class DataGenerator extends Generator<Void> {
 
-    public DataGenerator(Map<ParserRuleContext, Variable> variables, Map<ParserRuleContext, Type> types, Map<ParserRuleContext, String> constants, PrintStream output) {
+    public DataGenerator(Map<ParserRuleContext, Variable> variables, Map<ParserRuleContext, Type> types, Map<ParserRuleContext, String> constants, Asm output) {
         super(variables, types, constants, output);
     }
 
     public Void visitProgram(PfxParser.ProgramContext ctx) {
-        p("\t.data");
+        asm.line(".data");
         for (ParserRuleContext c : ctx.declaration()) {
             c.accept(this);
         }
@@ -31,14 +31,20 @@ class DataGenerator extends Generator<Void> {
             public String apply(Type.DoubleType t) {
                 return ".space " + t.storageSize();
             }
+
+            public String apply(Type.ArrayType t) {
+                return ".space " + t.storageSize();
+            }
         };
-        p(v.name() + ":\t" + v.type().apply(f));
+        asm.label(v.name());
+        asm.line(v.type().apply(f));
         return null;
     }
 
     public Void visitDoubleLiteralExpr(PfxParser.DoubleLiteralExprContext ctx) {
         String label = constants.get(ctx);
-        p(label + ":\t.double " + ctx.DoubleLiteral().getText());
+        asm.label(label);
+        asm.line(".double " + ctx.DoubleLiteral().getText());
         return null;
     }
 }

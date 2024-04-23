@@ -52,6 +52,27 @@ public class PfxBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements Pf
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
+	@Override public T visitArrayType(PfxParser.ArrayTypeContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitIndexedLValue(PfxParser.IndexedLValueContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitNamedLValue(PfxParser.NamedLValueContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
 	@Override public T visitIntLiteralExpr(PfxParser.IntLiteralExprContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
@@ -66,12 +87,12 @@ public class PfxBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements Pf
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitNameExpr(PfxParser.NameExprContext ctx) { return visitChildren(ctx); }
+	@Override public T visitAddExpr(PfxParser.AddExprContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitAddExpr(PfxParser.AddExprContext ctx) { return visitChildren(ctx); }
+	@Override public T visitLValueExpr(PfxParser.LValueExprContext ctx) { return visitChildren(ctx); }
 }

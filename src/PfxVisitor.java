@@ -43,6 +43,27 @@ public interface PfxVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitDoubleType(PfxParser.DoubleTypeContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code ArrayType}
+	 * labeled alternative in {@link PfxParser#type}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitArrayType(PfxParser.ArrayTypeContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code IndexedLValue}
+	 * labeled alternative in {@link PfxParser#lvalue}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitIndexedLValue(PfxParser.IndexedLValueContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code NamedLValue}
+	 * labeled alternative in {@link PfxParser#lvalue}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitNamedLValue(PfxParser.NamedLValueContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code IntLiteralExpr}
 	 * labeled alternative in {@link PfxParser#expr}.
 	 * @param ctx the parse tree
@@ -57,17 +78,17 @@ public interface PfxVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitDoubleLiteralExpr(PfxParser.DoubleLiteralExprContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code NameExpr}
-	 * labeled alternative in {@link PfxParser#expr}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitNameExpr(PfxParser.NameExprContext ctx);
-	/**
 	 * Visit a parse tree produced by the {@code AddExpr}
 	 * labeled alternative in {@link PfxParser#expr}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitAddExpr(PfxParser.AddExprContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code LValueExpr}
+	 * labeled alternative in {@link PfxParser#expr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitLValueExpr(PfxParser.LValueExprContext ctx);
 }
