@@ -14,6 +14,10 @@ public class Asm {
         out.println(s);
     }
 
+    public void nl() {
+        out.println();
+    }
+
     public void comment(String s) {
         println("# "+ s);
     }

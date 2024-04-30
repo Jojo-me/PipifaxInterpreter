@@ -1,13 +1,14 @@
 import ast.Type;
 import ast.Variable;
+import ast.Function;
 import util.Asm;
 import org.antlr.v4.runtime.ParserRuleContext;
 import java.util.Map;
 
 class DataGenerator extends Generator<Void> {
 
-    public DataGenerator(Map<ParserRuleContext, Variable> variables, Map<ParserRuleContext, Type> types, Map<ParserRuleContext, String> constants, Asm output) {
-        super(variables, types, constants, output);
+    public DataGenerator(Map<ParserRuleContext, Variable> variables, Map<ParserRuleContext, Function> functions, Map<ParserRuleContext, Type> types, Map<ParserRuleContext, String> constants, Asm output) {
+        super(variables, functions, types, constants, output);
     }
 
     public Void visitProgram(PfxParser.ProgramContext ctx) {
@@ -15,7 +16,7 @@ class DataGenerator extends Generator<Void> {
         for (ParserRuleContext c : ctx.declaration()) {
             c.accept(this);
         }
-        for (ParserRuleContext c : ctx.statement()) {
+        for (ParserRuleContext c : ctx.function()) {
             c.accept(this);
         }
         return null;
@@ -23,21 +24,24 @@ class DataGenerator extends Generator<Void> {
 
     public Void visitDeclaration(PfxParser.DeclarationContext ctx) {
         Variable v = variables.get(ctx);
-        Type.Functor<String> f = new Type.Functor<>() {
-            public String apply(Type.IntType t) {
-                return ".space " + t.storageSize();
+        Type.Functor<Void> f = new Type.Functor<>() {
+            public Void apply(Type.IntType t) {
+                asm.line(".space " + t.storageSize());
+                return null;
             }
 
-            public String apply(Type.DoubleType t) {
-                return ".space " + t.storageSize();
+            public Void apply(Type.DoubleType t) {
+                asm.line(".space " + t.storageSize());
+                return null;
             }
 
-            public String apply(Type.ArrayType t) {
-                return ".space " + t.storageSize();
+            public Void apply(Type.ArrayType t) {
+                asm.line(".space " + t.storageSize());
+                return null;
             }
         };
-        asm.label(v.name());
-        asm.line(v.type().apply(f));
+        asm.label(v.label());
+        v.type().apply(f);
         return null;
     }
 

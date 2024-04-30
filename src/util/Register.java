@@ -12,25 +12,15 @@ public abstract class Register {
         GP(String name) {
             super(name);
         }
-
-        public void release() {
-            Registers.releaseGP(this);
-        }
     }
 
     static class FP extends Register {
         FP(String name) {
             super(name);
         }
-
-        public void release() {
-            Registers.releaseFP(this);
-        }
     }
 
     public String toString() {
         return name;
     }
-
-    public abstract void release();
 }

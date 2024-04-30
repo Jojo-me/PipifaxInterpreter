@@ -26,5 +26,5 @@ for t in tests:
     ex("java -cp ..\\antlr-4.13.1-complete.jar;dst Main " + fn)
     # ~ ex("java -cp ..\\lib\\antlr-4.12.0-complete.jar;dst Dump " + fn)
 
-# java -cp ..\antlr-4.13.1-complete.jar;dst org.antlr.v4.gui.Interpreter src\Pfx.g4 program -gui test1.pfx
-# os.system("java -cp ..\\antlr-4.13.1-complete.jar;dst org.antlr.v4.gui.Interpreter src\\Pfx.g4 program -gui test1.pfx")
+# java -cp ..\antlr-4.13.1-complete.jar;dst org.antlr.v4.gui.Interpreter src\Pfx.g4 program -gui tst\\t1.pfx
+# os.system("java -cp ..\\antlr-4.13.1-complete.jar;dst org.antlr.v4.gui.Interpreter src\\Pfx.g4 program -gui tst\\t1.pfx")

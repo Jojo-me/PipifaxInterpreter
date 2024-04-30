@@ -16,12 +16,31 @@ public interface PfxVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitProgram(PfxParser.ProgramContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link PfxParser#function}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitFunction(PfxParser.FunctionContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link PfxParser#block}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitBlock(PfxParser.BlockContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code AssignmentStmt}
 	 * labeled alternative in {@link PfxParser#statement}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitAssignmentStmt(PfxParser.AssignmentStmtContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code CallStmt}
+	 * labeled alternative in {@link PfxParser#statement}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitCallStmt(PfxParser.CallStmtContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link PfxParser#declaration}.
 	 * @param ctx the parse tree

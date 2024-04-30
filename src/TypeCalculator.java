@@ -1,14 +1,17 @@
 import ast.Type;
 import ast.Variable;
+import ast.Function;
 import org.antlr.v4.runtime.ParserRuleContext;
 import java.util.Map;
 
 class TypeCalculator extends PfxBaseVisitor<Type> {
     private Map<ParserRuleContext, Variable> variables;
+    private Map<ParserRuleContext, Function> functions;
     private Map<ParserRuleContext, Type> types;
 
-    public TypeCalculator(Map<ParserRuleContext, Variable> variables, Map<ParserRuleContext, Type> types) {
+    public TypeCalculator(Map<ParserRuleContext, Variable> variables, Map<ParserRuleContext, Function> functions, Map<ParserRuleContext, Type> types) {
         this.variables = variables;
+        this.functions = functions;
         this.types = types;
     }
 

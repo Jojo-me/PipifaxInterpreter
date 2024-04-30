@@ -1,5 +1,6 @@
 import ast.Type;
 import ast.Variable;
+import ast.Function;
 import util.Asm;
 import util.Registers;
 import util.Register;
@@ -18,11 +19,11 @@ class CodeGenerator extends Generator<Void> {
             Register rt = Registers.getGP();
             asm.li(rt, arr.elementType().storageSize());
             asm.mul(ri, ri, rt);
-            rt.release();
+            Registers.release(rt);
 
             Register ra = ctx.lvalue().accept(this);
             asm.add(ra, ra, ri);
-            ri.release();
+            Registers.release(ri);
 
             return ra;
         }
@@ -31,7 +32,7 @@ class CodeGenerator extends Generator<Void> {
         public Register visitNamedLValue(PfxParser.NamedLValueContext ctx) {
             Variable v = variables.get(ctx);
             Register r = Registers.getGP();
-            asm.la(r, v.name());
+            asm.la(r, v.label());
             return r;
         }
 
@@ -48,7 +49,7 @@ class CodeGenerator extends Generator<Void> {
             Register rt = Registers.getGP();
             String label = constants.get(ctx);
             asm.fld(r, label,rt);
-            rt.release();
+            Registers.release(rt);
             return r;
         }
 
@@ -65,7 +66,7 @@ class CodeGenerator extends Generator<Void> {
                 public Register apply(Type.DoubleType t) {
                     Register r = Registers.getFP();
                     asm.fld(r,ra);
-                    ra.release();
+                    Registers.release(ra);
                     return r;
                 }
             });
@@ -88,7 +89,7 @@ class CodeGenerator extends Generator<Void> {
                     return null;
                 }
             });
-            rhs.release();
+            Registers.release(rhs);
 
             return lhs;
         }
@@ -96,24 +97,35 @@ class CodeGenerator extends Generator<Void> {
 
     private ExprCodeGenerator exprGen = new ExprCodeGenerator();
 
-    public CodeGenerator(Map<ParserRuleContext, Variable> variables, Map<ParserRuleContext, Type> types, Map<ParserRuleContext, String> constants, Asm output) {
-        super(variables, types, constants, output);
+    public CodeGenerator(Map<ParserRuleContext, Variable> variables, Map<ParserRuleContext, Function> functions, Map<ParserRuleContext, Type> types, Map<ParserRuleContext, String> constants, Asm output) {
+        super(variables, functions, types, constants, output);
     }
 
     @Override
     public Void visitProgram(PfxParser.ProgramContext ctx) {
-        asm.println("");
+        asm.nl();
         asm.line(".text");
-        asm.line(".global _main");
         asm.label("_main");
-        asm.line("jal main");
+        asm.line("jal func_main");
         asm.line("li a7,10");
         asm.line("ecall");
 
-        asm.label("main");
-        for (ParserRuleContext c : ctx.statement()) {
+        for (ParserRuleContext c : ctx.function()) {
             c.accept(this);
         }
+        return null;
+    }
+
+    @Override
+    public Void visitFunction(PfxParser.FunctionContext ctx) {
+        Function f = functions.get(ctx);
+        asm.nl();
+        asm.label(f.label());
+        asm.line("addi sp,sp,-16");
+        asm.line("sw ra,12(sp)");
+        ctx.block().accept(this);
+        asm.line("lw ra,12(sp)");
+        asm.line("addi sp,sp,16");
         asm.line("ret");
         return null;
     }
@@ -136,8 +148,15 @@ class CodeGenerator extends Generator<Void> {
             }
             // TODO Array assignments
         });
-        r.release();
-        ra.release();
+        Registers.release(r);
+        Registers.release(ra);
+        return null;
+    }
+
+    @Override
+    public Void visitCallStmt(PfxParser.CallStmtContext ctx) {
+        Function f = functions.get(ctx);
+        asm.line("jal " + f.label());
         return null;
     }
 }

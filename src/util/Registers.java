@@ -82,20 +82,12 @@ public class Registers {
         return r;
     }
 
-    static void releaseGP(Register r) {
-        freeGPs.addFirst(r);
-    }
-
-    static void releaseFP(Register r) {
-        freeFPs.addFirst(r);
-    }
-
     public static void release(Register r) {
         if (r instanceof Register.GP) {
-            releaseGP(r);
+            freeGPs.addFirst(r);
         }
         else if (r instanceof Register.FP) {
-            releaseFP(r);
+            freeFPs.addFirst(r);
         }
     }
 }

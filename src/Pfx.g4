@@ -1,11 +1,20 @@
 grammar Pfx;
 
 program
-    : (statement | declaration)*
+    : (function | declaration)*
+    ;
+
+function
+    : 'func' ID '(' ')' block
+    ;
+
+block
+    : '{' statement* '}'
     ;
 
 statement
     : lvalue '=' expr # AssignmentStmt
+    | ID '(' ')'       # CallStmt
     ;
 
 declaration

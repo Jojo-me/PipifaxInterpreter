@@ -13,6 +13,10 @@ public class Variable {
         return this.name;
     }
 
+    public String label() {
+        return "var_" + name();
+    }
+
     public Type type() {
         return this.type;
     }
