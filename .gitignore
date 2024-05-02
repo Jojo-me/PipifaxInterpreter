@@ -1,0 +1,4 @@
+.compiled/
+antlr_generated/
+src/.antlr/
+tst/*.pfx.asm
