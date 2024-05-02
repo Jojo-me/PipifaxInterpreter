@@ -15,6 +15,8 @@ block
 statement
     : lvalue '=' expr # AssignmentStmt
     | ID '(' ')'       # CallStmt
+	| 'if' expr block ('else' block)?
+	| 'while' expr block
     ;
 
 declaration
